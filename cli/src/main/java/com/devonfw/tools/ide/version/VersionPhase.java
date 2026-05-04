@@ -15,7 +15,7 @@ public enum VersionPhase implements AbstractVersionPhase {
   UNSTABLE(Boolean.FALSE, "!"),
 
   /** A snapshot version from development (e.g. "-SNAPSHOT" suffix in maven). */
-  SNAPSHOT(Boolean.FALSE, "beta-snapshot", "snapshot", "dev"),
+  SNAPSHOT(Boolean.FALSE, "snapshot", "dev"),
 
   /** A nightly build version from continuous-integration (CI) process. */
   NIGHTLY("nightly", "nb", "ci"),
@@ -140,8 +140,15 @@ public enum VersionPhase implements AbstractVersionPhase {
 
     for (VersionPhase phase : values()) {
       for (String id : phase.ids) {
-        if (id.equals(letters)) {
-          return phase;
+        if (phase == VersionPhase.SNAPSHOT) {
+          // Classify all versions with "snapsot" or "dev" as SNAPSHOT
+          if (letters.contains(id)) {
+            return phase;
+          }
+        } else {
+          if (id.equals(letters)) {
+            return phase;
+          }
         }
       }
     }
