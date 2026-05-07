@@ -138,17 +138,14 @@ public enum VersionPhase implements AbstractVersionPhase {
    */
   public static VersionPhase of(String letters) {
 
+    if (letters.contains("snapshot")) {
+      // Classify all versions with "snapshot" as SNAPSHOT
+      return SNAPSHOT;
+    }
     for (VersionPhase phase : values()) {
       for (String id : phase.ids) {
-        if (phase == VersionPhase.SNAPSHOT) {
-          // Classify all versions with "snapsot" or "dev" as SNAPSHOT
-          if (letters.contains(id)) {
-            return phase;
-          }
-        } else {
-          if (id.equals(letters)) {
-            return phase;
-          }
+        if (id.equals(letters)) {
+          return phase;
         }
       }
     }
